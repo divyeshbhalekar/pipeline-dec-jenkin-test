@@ -41,7 +41,7 @@ pipeline{
         stage("Deploy to prod"){
             when {
                 expression {
-                    return env.BRANCH_NAME == 'master' && param.version == '2.1.0'
+                    return env.BRANCH_NAME == 'master' && params.version == '2.1.0'
                 }
             }
             steps{
