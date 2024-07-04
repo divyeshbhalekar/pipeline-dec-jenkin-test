@@ -28,6 +28,7 @@ pipeline {
                 sh 'echo "${person}"'
                 sh 'echo "${isMale}"'
                 sh 'echo "${isMale}"'
+                sh 'echo "${BRANCH_NAME}"'
             }
         }
         stage("Build"){
