@@ -1,7 +1,7 @@
 pipeline{
     agent any
     environment {
-        name: 'divyesh'
+        name= 'divyesh'
     }
     parameters {
         string(name: 'divyesh',defaultValue: 'divyesh',description: 'who are you')
