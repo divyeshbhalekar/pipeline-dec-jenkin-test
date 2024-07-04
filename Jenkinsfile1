@@ -1,62 +1,69 @@
-pipeline {
+pipeline{
     agent any
     environment {
-        name = 'divyesh'
+        name= 'divyesh'
     }
     parameters {
-        string(name: 'divyesh', defaultValue: 'divyesh', description: 'who are you')
-        choice(name: 'version', choices: ['2.1.0', '2.1.1', '2.1.2'], description: 'software version')
+        string(name: 'divyesh',defaultValue: 'divyesh',description: 'who are you')
+        choice(name: 'version', choices:['2.1.0','2.1.1','2.1.2'], description: 'software version')
     }
-    stages {
-        stage("Check_Branch") {
+    stages{
+        stage("Print Branch Name") {
             steps {
                 script {
-                    if (env.BRANCH_NAME != 'master' && env.BRANCH_NAME != 'main') {
-                        error("Terminating pipeline, Not a specified deploy branch")
-                    }
+                    echo "Current branch is: ${env.BRANCH_NAME}"
                 }
             }
         }
-        stage("Test") {
+        stage("Check_Branch"){
+            steps{
+               script {
+                if (env.BRANCH_NAME != 'master' && env.BRANCH_NAME != 'main') {
+                    error ("Terminating pipeline, Not a specifide deploy branch")
+                }
+               }
+            }
+        }
+        stage("Test"){
             when {
                 expression {
-                    return env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'demo'
+                    env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'demo'
                 }
             }
-            steps {
+            steps{
                 echo "========executing Test========"
             }
         }
-        stage("Build") {
-            steps {
+        stage("Build"){
+            steps{
                 echo "========executing Build========"
-                sh 'echo "${name}"'
+                sh ' echo  "${name}" '
             }
         }
-        stage("Deploy to dev") {
-            steps {
+        stage("Deploy to dev"){
+            steps{
                 echo "========executing Deploy to Dev========"
             }
         }
-        stage("Deploy to prod") {
+        stage("Deploy to prod"){
             when {
                 expression {
                     return env.BRANCH_NAME == 'master' && params.version == '2.1.0'
                 }
             }
-            steps {
+            steps{
                 echo "========executing Deploy to prod========"
             }
         }
     }
-    post {
-        always {
+    post{
+        always{
             echo "========always========"
         }
-        success {
-            echo "========pipeline executed successfully========"
+        success{
+            echo "========pipeline executed successfully ========"
         }
-        failure {
+        failure{
             echo "========pipeline execution failed========"
         }
     }
