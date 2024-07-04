@@ -46,6 +46,10 @@ pipeline{
             }
         }
         stage("Deploy to prod"){
+            input {
+                message "should we continue"
+                ok "yes we should"
+            }
             when {
                 expression {
                     return env.BRANCH_NAME == 'master' && params.version == '2.1.0'
