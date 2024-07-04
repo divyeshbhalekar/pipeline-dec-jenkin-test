@@ -1,0 +1,63 @@
+pipeline{
+    agent any
+    environment {
+        name: 'divyesh'
+    }
+    parameters {
+        string(name: 'divyesh',defaultValue: 'divyesh',description: 'who are you')
+        choice(app: 'version', choices:['2.1.0','2.1.1','2.1.2'], description: 'software version')
+    }
+    stages{
+        stage("Check_Branch"){
+            steps{
+               script {
+                if (env.BRANCH_NAME != 'master' && env.BRANCH_NAME != 'master') {
+                    error ("Terminating pipeline, Not a specifide deploy branch")
+                }
+               }
+            }
+        }
+        stage("Test"){
+            when {
+                expression {
+                    env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'demo'
+                }
+            }
+            steps{
+                echo "========executing Test========"
+            }
+        }
+        stage("Build"){
+            steps{
+                echo "========executing Build========"
+                sh ' echo  "${name}" '
+            }
+        }
+        stage("Deploy to dev"){
+            steps{
+                echo "========executing Deploy to Dev========"
+            }
+        }
+        stage("Deploy to prod"){
+            when {
+                expression {
+                    return env.BRANCH_NAME == 'master' && param.version == '2.1.0'
+                }
+            }
+            steps{
+                echo "========executing Deploy to prod========"
+            }
+        }
+    }
+    post{
+        always{
+            echo "========always========"
+        }
+        success{
+            echo "========pipeline executed successfully ========"
+        }
+        failure{
+            echo "========pipeline execution failed========"
+        }
+    }
+}
