@@ -12,7 +12,7 @@ pipeline{
         stage("Checkout"){
             when {
                 expression {
-                    env.branch == 'Master'
+                    env.branch == 'main'
                 }
             }
             steps {
