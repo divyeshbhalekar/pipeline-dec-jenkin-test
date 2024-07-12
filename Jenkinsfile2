@@ -1,0 +1,29 @@
+pipeline{
+    agent any;
+    environment {
+        name = 'divyesh'
+    }
+    parameters {
+        string(name: 'divyesh', defaultValue: 'divyesh',description: 'this is test')
+        choice(name: 'version', choices:['Mumbai','Jaipur','pune'] , description: 'test choices')
+    }
+
+    stages{
+        stage("Checkout"){
+            when {
+                expression {
+                    env.branch == 'Master'
+                }
+            }
+            steps {
+                git branch:'main',credentialsId:'github_token',url:'https://github.com/divyeshbhalekar/pipeline-dec-jenkin-test.git'
+                echo "executing git clone stage cloning the repo"
+            }
+        }
+        stage("A"){
+            steps{
+                echo "====++++executing A++++===="
+            }
+        }
+    }
+}
